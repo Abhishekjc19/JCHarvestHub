@@ -48,9 +48,7 @@ Deployment: Easily deployable on platforms like GitHub Pages, Netlify, or Vercel
 📊 JSON Data Structure
 The product data is stored in products.json with the following structure:
 
-json
-Copy
-Edit
+```json
 [
   {
     "id": "1",
@@ -62,25 +60,27 @@ Edit
     "image_url": "link_to_image"
   }
 ]
+```
+
 Installation & Setup 🛠️
 Clone the Repository:
 
-bash
-Copy
-Edit
-git clone https://github.com/Abhishekjc19/JC-HarvestHub.git
+```bash
+git clone https://github.com/Abhishekjc19/JCHarvestHub.git
+```
+
 Navigate to the Project Directory:
 
-bash
-Copy
-Edit
-cd JC-HarvestHub
+```bash
+cd JCHarvestHub
+```
+
 Start a Local Server (if applicable):
 
-bash
-Copy
-Edit
+```bash
 npx serve
+```
+
 Customize Product Data:
 
 Update the products.json file with your product details.
@@ -96,16 +96,6 @@ Multilingual Support: Expand accessibility for global customers.
 
 Contributing 🤝
 Contributions are welcome!
-
-Fork the repository.
-
-Create a new feature branch: git checkout -b feature-name.
-
-Commit your changes: git commit -m "Add feature-name".
-
-Push to the branch: git push origin feature-name.
-
-Open a pull request.
 
 License 📜
 This project is licensed under the MIT License - see the LICENSE file for details.
