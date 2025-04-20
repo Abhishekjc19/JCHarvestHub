@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Premium Arabica Coffee",
+    "category": "coffee",
+    "price": 750,
+    "description": "Our Premium Arabica Coffee is sourced from the lush hills of Chikmagalur, Karnataka. Known for its smooth, sweet taste with notes of chocolate and caramel, this medium-roast coffee delivers a perfectly balanced cup every time. Each batch is carefully roasted to bring out the complex flavors that make Arabica beans so sought after.",
+    "shortDescription": "Smooth, sweet coffee with notes of chocolate and caramel.",
+    "imageUrl": "https://images.pexels.com/photos/2074122/pexels-photo-2074122.jpeg",
+    "origin": "Chikmagalur, Karnataka",
+    "featured": true,
+    "lastUpdated": "2024-03-20"
+  },
+  {
+    "id": 2,
+    "name": "Premium Robusta Coffee",
+    "category": "coffee",
+    "price": 520,
+    "description": "Our Robusta Coffee comes from the finest coffee estates in Chikmagalur. These premium beans offer a strong, full-bodied flavor with a distinctive earthy aroma. Perfect for those who prefer their coffee with a bold kick, our Robusta beans are carefully selected and roasted to perfection.",
+    "shortDescription": "Strong, full-bodied coffee with rich earthy notes.",
+    "imageUrl": "https://images.pexels.com/photos/2615323/pexels-photo-2615323.jpeg",
+    "origin": "Chikmagalur, Karnataka",
+    "featured": false,
+    "lastUpdated": "2024-03-20"
+  },
+  {
+    "id": 3,
+    "name": "Premium Arecanut",
+    "category": "arecanut",
+    "price": 320.40,
+    "description": "Our Premium Arecanut is harvested from the finest arecanut palms in Chikmagalur. These high-quality nuts are known for their consistent quality and authentic flavor. Each nut is carefully processed using traditional methods to preserve its natural properties and distinctive taste.",
+    "shortDescription": "Premium quality arecanuts with authentic flavor.",
+    "imageUrl": "https://images.pexels.com/photos/5501119/pexels-photo-5501119.jpeg",
+    "origin": "Chikmagalur, Karnataka",
+    "featured": true,
+    "lastUpdated": "2024-03-20"
+  },
+  {
+    "id": 4,
+    "name": "Black Pepper Premium",
+    "category": "pepper",
+    "price": 616.32,
+    "description": "Our Black Pepper Premium is grown in the fertile soils of Karnataka. These peppercorns are hand-picked at optimal ripeness to ensure maximum flavor and aroma. With a perfect balance of heat and complex flavor notes, this pepper will elevate any dish with its distinctive pungency and aromatic qualities.",
+    "shortDescription": "Hand-picked black pepper with intense flavor.",
+    "imageUrl": "https://images.pexels.com/photos/4198370/pexels-photo-4198370.jpeg",
+    "origin": "Chikmagalur, Karnataka",
+    "featured": true,
+    "lastUpdated": "2024-03-20"
+  }
+]
