@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { MapPin, Calendar, Info } from 'lucide-react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { MapPin, Calendar, Info, Plus, Minus } from 'lucide-react';
 import { Product } from '../utils/types';
 import InquiryForm from './InquiryForm';
 
@@ -11,6 +11,8 @@ interface ProductDetailsProps {
   addedToCart: boolean;
 }
 
+const MAX_QUANTITY = 100; // Maximum quantity that can be added to cart
+
 const ProductDetails: React.FC<ProductDetailsProps> = ({
   product,
   onAddToCart,
@@ -19,18 +21,19 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
   addedToCart
 }) => {
   const [imageError, setImageError] = useState<boolean>(false);
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
 
-  const formatPrice = (price: number): string => {
+  const formatPrice = useMemo(() => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    }).format(price);
-  };
+    }).format(product.price);
+  }, [product.price]);
 
-  const getFlavorProfile = (category: string): string => {
-    switch (category) {
+  const getFlavorProfile = useMemo(() => {
+    switch (product.category) {
       case 'coffee':
         return product.name.includes('Arabica') 
           ? 'Smooth, sweet with notes of chocolate and caramel'
@@ -42,10 +45,10 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       default:
         return '';
     }
-  };
+  }, [product.category, product.name]);
 
-  const getUsageTips = (category: string): string[] => {
-    switch (category) {
+  const getUsageTips = useMemo(() => {
+    switch (product.category) {
       case 'coffee':
         return [
           'For best results, grind beans just before brewing',
@@ -70,40 +73,64 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       default:
         return [];
     }
+  }, [product.category]);
+
+  const handleQuantityChange = useCallback((change: number) => {
+    const newQuantity = quantity + change;
+    if (newQuantity >= 1 && newQuantity <= MAX_QUANTITY) {
+      onQuantityChange(newQuantity);
+    }
+  }, [quantity, onQuantityChange]);
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
+    setImageLoading(false);
   };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Product Image and Basic Info */}
       <div className="lg:col-span-2">
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden mb-6">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden mb-6 relative">
+          {imageLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/5">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+            </div>
+          )}
           <img 
             src={imageError ? '/placeholder-product.svg' : product.imageUrl} 
             alt={product.name}
-            className="w-full h-full object-cover aspect-video"
-            onError={() => setImageError(true)}
+            className={`w-full h-full object-cover aspect-video transition-opacity duration-300 ${
+              imageLoading ? 'opacity-0' : 'opacity-100'
+            }`}
+            onError={handleImageError}
+            onLoad={handleImageLoad}
           />
         </div>
         
         <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 mb-6">
           <h1 className="text-3xl font-bold text-white mb-2">{product.name}</h1>
           <div className="flex items-center text-primary font-bold text-xl mb-4">
-            {formatPrice(product.price)} <span className="text-sm text-gray-400 ml-1">/ kg</span>
+            {formatPrice} <span className="text-sm text-gray-400 ml-1">/ kg</span>
           </div>
           
           <div className="flex items-center text-gray-300 mb-2">
-            <MapPin size={16} className="mr-2 text-primary" />
+            <MapPin size={16} className="mr-2 text-primary" aria-hidden="true" />
             <span>Origin: {product.origin}</span>
           </div>
           
           <div className="flex items-center text-gray-300 mb-4">
-            <Calendar size={16} className="mr-2 text-primary" />
+            <Calendar size={16} className="mr-2 text-primary" aria-hidden="true" />
             <span>Last Updated: {new Date(product.lastUpdated).toLocaleDateString()}</span>
           </div>
           
           <div className="border-t border-white/10 pt-4 mt-4">
             <h3 className="text-lg font-semibold text-white mb-2 flex items-center">
-              <Info size={18} className="mr-2 text-primary" />
+              <Info size={18} className="mr-2 text-primary" aria-hidden="true" />
               Description
             </h3>
             <p className="text-gray-300 leading-relaxed">
@@ -116,15 +143,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10">
             <h3 className="text-lg font-semibold text-white mb-3">Flavor Profile</h3>
-            <p className="text-gray-300">{getFlavorProfile(product.category)}</p>
+            <p className="text-gray-300">{getFlavorProfile}</p>
           </div>
           
           <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10">
             <h3 className="text-lg font-semibold text-white mb-3">Usage Tips</h3>
             <ul className="text-gray-300 space-y-2">
-              {getUsageTips(product.category).map((tip, index) => (
+              {getUsageTips.map((tip, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="text-primary mr-2">•</span>
+                  <span className="text-primary mr-2" aria-hidden="true">•</span>
                   {tip}
                 </li>
               ))}
@@ -139,32 +166,44 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
           <h3 className="text-lg font-semibold text-white mb-4">Add to Cart</h3>
           
           <div className="flex items-center mb-6">
-            <span className="text-white mr-4">Quantity:</span>
-            <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-lg">
+            <span className="text-white mr-4" id="quantity-label">Quantity:</span>
+            <div 
+              className="flex items-center bg-white/10 backdrop-blur-sm rounded-lg"
+              role="spinbutton"
+              aria-labelledby="quantity-label"
+              aria-valuenow={quantity}
+              aria-valuemin={1}
+              aria-valuemax={MAX_QUANTITY}
+            >
               <button 
-                onClick={() => onQuantityChange(quantity - 1)}
+                onClick={() => handleQuantityChange(-1)}
                 disabled={quantity <= 1}
-                className="px-3 py-2 text-gray-300 hover:text-white disabled:opacity-50"
+                className="px-3 py-2 text-gray-300 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Decrease quantity"
               >
-                -
+                <Minus size={16} />
               </button>
               <span className="px-4 text-white font-medium">{quantity}</span>
               <button 
-                onClick={() => onQuantityChange(quantity + 1)}
-                className="px-3 py-2 text-gray-300 hover:text-white"
+                onClick={() => handleQuantityChange(1)}
+                disabled={quantity >= MAX_QUANTITY}
+                className="px-3 py-2 text-gray-300 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Increase quantity"
               >
-                +
+                <Plus size={16} />
               </button>
             </div>
           </div>
           
           <button
             onClick={onAddToCart}
+            disabled={addedToCart}
             className={`w-full flex items-center justify-center px-6 py-3 rounded-lg ${
               addedToCart 
-                ? 'bg-success text-white' 
+                ? 'bg-success text-white cursor-not-allowed' 
                 : 'bg-primary text-black hover:bg-primary/90'
             } font-medium transition-colors shadow-lg`}
+            aria-live="polite"
           >
             {addedToCart ? 'Added to Cart!' : 'Add to Cart'}
           </button>
