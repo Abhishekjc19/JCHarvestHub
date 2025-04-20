@@ -3,7 +3,7 @@ JC HarvestHub is a sleek and modern e-commerce platform designed for selling pre
 
 Features 🚀
 🌟 General Features
-Modern UI/UX Design: Sleek glassmorphism styling with responsive layouts.
+Modern UI/UX Design: Sleek glassmorphism styling with responsive layouts.        
 
 Dynamic Data: Fetch product details from a structured products.json file.
 
